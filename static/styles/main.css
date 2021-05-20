@@ -1,3 +1,52 @@
 .main-text {
-    font-size: 40px;
+    color: white;
+}
+
+.title-text {
+    font-size: 72px;
+    margin-bottom: 0px;
+}
+
+body {
+    background: lightsteelblue;
+}
+
+#title {
+    text-align: center;
+}
+
+
+.block {
+    float:left;
+    width: 20%;
+    height: 379px;
+    background: rgba(129, 129, 129, 0.5);
+    margin-left: 10%;
+    border-radius: 35px;
+}
+
+.block:hover{
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.image-div{
+    position: relative;
+    left: 50%;
+
+    margin-top: 50px;
+    padding-bottom: 35px;
+}
+a{
+    color:black;
+}
+.image-class{
+    margin-right: 50%;
+    transform: translate(-50%);
+    width: 186px;
+}
+
+.block-text{
+    font-family: "Abyssinica SIL";
+    font-size:20px;
+    text-align: center;
 }
