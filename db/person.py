@@ -4,14 +4,14 @@ import time
 from .db import DBConnect
 
 
-class Alien(DBConnect):
+class Person(DBConnect):
     def __init__(self):
-        super(Alien, self).__init__()
+        super(Person, self).__init__()
 
     def get_all(self, params=['*']):
-        self.cur.execute(f"SELECT {','.join(params)} FROM alien")
+        self.cur.execute(f"SELECT {','.join(params)} FROM person")
         return self.cur.fetchall()
 
     def get_by_id(self, _id, params=['*']):
-        self.cur.execute(f"SELECT {','.join(params)} FROM alien WHERE alien_id={_id}")
+        self.cur.execute(f"SELECT {','.join(params)} FROM person WHERE person_id={_id}")
         return self.cur.fetchall()[0]

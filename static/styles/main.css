@@ -7,9 +7,30 @@
     margin-bottom: 0px;
 }
 
-body {
-    background: lightsteelblue;
+#background-2 {
+    background-image: url("../images/background.jpg");
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -2;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
+
+#background {
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+}
+
 
 #title {
     text-align: center;
@@ -17,7 +38,7 @@ body {
 
 
 .block {
-    float:left;
+    float: left;
     width: 20%;
     height: 379px;
     background: rgba(129, 129, 129, 0.5);
@@ -25,28 +46,80 @@ body {
     border-radius: 35px;
 }
 
-.block:hover{
+.block:hover {
     background: rgba(255, 255, 255, 0.5);
 }
 
-.image-div{
+.image-div {
     position: relative;
     left: 50%;
 
     margin-top: 50px;
     padding-bottom: 35px;
 }
-a{
-    color:black;
+
+a {
+    text-decoration: none;
+    color: black;
 }
-.image-class{
+
+.image-class {
     margin-right: 50%;
     transform: translate(-50%);
     width: 186px;
 }
 
-.block-text{
+.block-text {
     font-family: "Abyssinica SIL";
-    font-size:20px;
+    font-size: 20px;
     text-align: center;
+}
+
+.block-user {
+    float: left;
+    width: 15%;
+    height: 200px;
+    background: rgba(129, 129, 129, 0.6);
+    margin-left: 4%;
+    border-radius: 35px;
+    margin-top: 40px;
+}
+
+.block-user:hover {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.user-id {
+    font-size: 32px;
+    float: right;
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.user-name {
+    padding-left: 10px;
+    font-size: 24px;
+}
+
+.user-img {
+    max-height: 100px;
+    max-width: 100px;
+}
+
+.info {
+    transform: translate(30%);
+    width: 60%;
+    min-height: 100px;
+    text-align: center;
+    font-size: 24px;
+    background-color: rgba(129, 129, 129, 0.6);
+}
+
+.info:hover {
+    background: rgba(255, 255, 255, 0.6);
+
+}
+
+.info-text {
+    transform: translateY(100%);
 }

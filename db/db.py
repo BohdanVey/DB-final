@@ -1,11 +1,9 @@
 import psycopg2
 import os
 import time
-import json
-import datetime
 
 
-class Person:
+class DBConnect:
     P = None
 
     def __init__(self):
@@ -18,17 +16,16 @@ class Person:
                         user=os.getenv("DB_USER"),
                         password=os.getenv('DB_PASSWORD')
                     )
-
                     self.cur = self.con.cursor()
                     break
                 except NameError as e:
                     time.sleep(5)
                     continue
-            Person.P = self
+            DBConnect.P = self
         else:
             self.con = self.P.con
             self.cur = self.P.cur
 
 
-if __name__ == '__main__':
-    Person().save_results('3286437378061599', Person().get_attributes('3286437378061599'))
+
+

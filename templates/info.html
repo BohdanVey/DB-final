@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+</head>
+<body>
+<div id="background"></div>
+<div id="background-2"></div>
+<a href="/">
+    <div id="title">
+        <div id="main-title"><p class="main-text title-text">Aliens</p></div>
+        <div id="sub-title"><p class="main-text sub-text">explore the world of strangers</p></div>
+    </div>
+</a>
+{% for i in range(0,length) %}
+    <a href="/question/{{ texsts[i][1] }}/{{ special_id }}">
+        <div class="info">
+            <p class="info-text">
+                {{ texsts[i][0] }}
+            </p>
+        </div>
+    </a>
+{% endfor %}
+</body>
+</html>
