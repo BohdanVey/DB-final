@@ -16,15 +16,19 @@
     </div>
 </a>
 
-{% from "_formhelpers.html" import render_field %}
-<form method=post>
-    <dl>
-        {{ render_field(form.name) }}
-        {{ render_field(form.surname) }}
-        {{ render_field(form.url) }}
-    </dl>
-    <p><input type=submit value='{{ button_text }}'>
-</form>
+<div class="block centered">
+    <div class="sub-block">
+        {% from "_formhelpers.html" import render_field %}
+
+        <form method=post>
+            {{ render_field(form.name) }}
+            {{ render_field(form.surname) }}
+            {{ render_field(form.url) }}
+            <p><input type=submit class='submit-button' value='{{ button_text }}'>
+
+        </form>
+    </div>
+</div>
 
 </body>
 </html>
