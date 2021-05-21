@@ -41,13 +41,14 @@
     float: left;
     width: 20%;
     height: 379px;
-    background: rgba(129, 129, 129, 0.5);
+    background: rgba(129, 129, 129, 0.7);
     margin-left: 10%;
     border-radius: 35px;
+    margin-top:50px;
 }
 
 .block:hover {
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.7 );
 }
 
 .image-div {

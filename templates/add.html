@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+
+</head>
+<body>
+<div id="background"></div>
+<div id="background-2"></div>
+<a href="/">
+    <div id="title">
+        <div id="main-title"><p class="main-text title-text">Aliens</p></div>
+        <div id="sub-title"><p class="main-text sub-text">explore the world of strangers</p></div>
+    </div>
+</a>
+
+{% from "_formhelpers.html" import render_field %}
+<form method=post>
+    <dl>
+        {{ render_field(form.name) }}
+        {{ render_field(form.surname) }}
+        {{ render_field(form.url) }}
+    </dl>
+    <p><input type=submit value='{{ button_text }}'>
+</form>
+
+</body>
+</html>

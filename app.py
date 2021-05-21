@@ -1,7 +1,8 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request, url_for
 import os
 from db.alien import Alien
 from db.person import Person
+from forms import AddFormPerson, AddFormAlien
 
 TEMPLATE_DIR = os.path.abspath('./templates')
 STATIC_DIR = os.path.abspath('./static')
@@ -68,6 +69,31 @@ def general_page():
 
     ]
     return render_template('info.html', length=len(texsts), texsts=texsts, special_id=0)
+
+
+@app.route('/add/person', methods=["GET", "POST"])
+def add_person():
+    form = AddFormPerson(request.form)
+    if request.method == 'POST' and form.validate():
+        print(form.name)
+        Person().add_person(form.name.data, form.surname.data, form.url.data)
+        return redirect('/')
+    return render_template('add.html', form=form, button_text="Add User")
+
+
+@app.route('/add/alien', methods=["GET", "POST"])
+def add_alien():
+    form = AddFormAlien(request.form)
+    if request.method == 'POST' and form.validate():
+        print(form.name)
+        Alien().add_alien(form.name.data, form.surname.data, form.url.data)
+        return redirect('/')
+    return render_template('add.html', form=form, button_text="Add Alien")
+
+
+@app.route('/add/ship', methods=["GET", "POST"])
+def add_ship():
+    return redirect(url_for('/'))
 
 
 if __name__ == '__main__':

@@ -8,39 +8,70 @@
 <body>
 <div id="background"></div>
 <div id="background-2"></div>
-    <a href="/">
-        <div id="title">
-            <div id="main-title"><p class="main-text title-text">Aliens</p></div>
-            <div id="sub-title"><p class="main-text sub-text">explore the world of strangers</p></div>
+<a href="/">
+    <div id="title">
+        <div id="main-title"><p class="main-text title-text">Aliens</p></div>
+        <div id="sub-title"><p class="main-text sub-text">explore the world of strangers</p></div>
+    </div>
+</a>
+
+
+<div class="content">
+
+
+
+    <a href="/general">
+        <div class="block" id="block-1">
+            <div class="image-div">
+                <img class="image-class" src="{{ url_for('static',filename='images/home.png') }}">
+            </div>
+            <div class="block-text">Explore general information</div>
         </div>
     </a>
-    <div class="content">
 
-        <a href="/general">
-            <div class="block" id="block-1">
-                <div class="image-div">
-                    <img class="image-class" src="{{ url_for('static',filename='images/home.png') }}">
-                </div>
-                <div class="block-text">Explore general information</div>
+    <a href="/alien">
+        <div class="block" id="block-2">
+            <div class="image-div">
+                <img class="image-class" src="{{ url_for('static',filename='images/alien.png') }}">
             </div>
-        </a>
+            <div class="block-text">Explore information about aliens</div>
+        </div>
+    </a>
+    <a href="/person">
+        <div class="block" id="block-3">
+            <div class="image-div">
+                <img class="image-class" src="{{ url_for('static',filename='images/person.png') }}">
+            </div>
+            <div class="block-text">Explore information about people</div>
+        </div>
+    </a>
 
-        <a href="/alien">
-            <div class="block" id="block-2">
-                <div class="image-div">
-                    <img class="image-class" src="{{ url_for('static',filename='images/alien.png') }}">
-                </div>
-                <div class="block-text">Explore information about aliens</div>
+
+    <a href="/add/ship">
+        <div class="block" id="block-4">
+            <div class="image-div">
+                <img class="image-class" src="{{ url_for('static',filename='images/home.png') }}">
             </div>
-        </a>
-        <a href="/person">
-            <div class="block" id="block-3">
-                <div class="image-div">
-                    <img class="image-class" src="{{ url_for('static',filename='images/person.png') }}">
-                </div>
-                <div class="block-text">Explore information about people</div>
+            <div class="block-text">Add new ships</div>
+        </div>
+    </a>
+
+    <a href="/add/alien">
+        <div class="block" id="block-5">
+            <div class="image-div">
+                <img class="image-class" src="{{ url_for('static',filename='images/alien.png') }}">
             </div>
-        </a>
-    </div>
+            <div class="block-text">Add new alien</div>
+        </div>
+    </a>
+    <a href="/add/person">
+        <div class="block" id="block-6">
+            <div class="image-div">
+                <img class="image-class" src="{{ url_for('static',filename='images/person.png') }}">
+            </div>
+            <div class="block-text">Add new people people</div>
+        </div>
+    </a>
+</div>
 </body>
 </html>

@@ -15,3 +15,15 @@ class Alien(DBConnect):
     def get_by_id(self, _id, params=['*']):
         self.cur.execute(f"SELECT {','.join(params)} FROM alien WHERE alien_id={_id}")
         return self.cur.fetchall()[0]
+
+    def check_alien(self, name, surname):
+        self.cur.execute(f"SELECT * FROM alien WHERE name='{name}' AND surname='{surname}'")
+        return len(list(self.cur.fetchall())) > 0
+
+    def add_alien(self, name, surname, url=None):
+        if url:
+            self.cur.execute(f"INSERT INTO alien (name,surname,url) VALUES ('{name}','{surname}','{url}')")
+        else:
+            self.cur.execute(f"INSERT INTO alien (name,surname) VALUES ('{name}','{surname}')")
+
+        self.con.commit()
