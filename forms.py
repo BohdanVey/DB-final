@@ -1,4 +1,5 @@
-from wtforms import Form, BooleanField, StringField, PasswordField, SelectField, DateField, validators
+from wtforms import Form, BooleanField, StringField, PasswordField, SelectField, DateField, SelectMultipleField, \
+    validators
 from db.person import Person
 from db.alien import Alien
 from db.ship import Ship
@@ -12,6 +13,25 @@ class AdvanceForm(Form):
         return True
 
 
+class ExcursionForm(AdvanceForm):
+    person = SelectMultipleField('Choose Person', validators=[validators.DataRequired()])
+    datetime_ = StringField('Choose still time', validators=[validators.DataRequired()])
+
+    def validate(self):
+        if not super(ExcursionForm, self).validate():
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
+        except:
+            self.datetime_.errors = []
+            self.datetime_.errors.append("Please use %Y-%m-%d standard")
+            return False
+        return True
+
+    def submit(self, data):
+        Alien().make_excursion(data['alien'], data['person'], data['datetime_'])
+
+
 class StillForm(AdvanceForm):
     person = SelectField('Choose Person', validators=[validators.DataRequired()])
     ship = SelectField('Choose Ship', validators=[validators.DataRequired()])
@@ -23,17 +43,46 @@ class StillForm(AdvanceForm):
 
         try:
             my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
-            print(my_date)
+            if Person().get_ship_specific_time(self.person.data, my_date)[0] != -1:
+                self.datetime_.errors = []
+                self.datetime_.errors.append("This person already in ship at this time")
+                return False
         except:
             print(self.datetime_.errors)
             self.datetime_.errors = []
             self.datetime_.errors.append("Please use %Y-%m-%d standard")
+
             return False
         return True
 
     def submit(self, data):
-        print(data)
         Alien().still_person(data['alien'], data['person'], data['ship'], data['datetime_'])
+
+
+class TransferForm(AdvanceForm):
+    person = SelectField('Choose Person', validators=[validators.DataRequired()])
+    ship = SelectField('Choose Ship', validators=[validators.DataRequired()])
+    datetime_ = StringField('Choose still time', validators=[validators.DataRequired()])
+
+    def validate(self):
+        if not super(TransferForm, self).validate():
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
+            if Person().get_ship_specific_time(self.person.data, my_date)[0] == -1:
+                self.datetime_.errors = []
+                self.datetime_.errors.append("Person should be on ship at this time")
+                return False
+        except:
+            print(self.datetime_.errors)
+            self.datetime_.errors = []
+            self.datetime_.errors.append("Please use %Y-%m-%d standard")
+
+            return False
+        return True
+
+    def submit(self, data):
+        Alien().transfer_person(data['alien'], data['person'], data['ship'], data['datetime_'])
 
 
 class AddFormShip(Form):

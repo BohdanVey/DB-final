@@ -22,8 +22,12 @@
         {% from "_formhelpers.html" import render_field %}
 
         <form method=post>
+            {% if form.person %}
             {{ render_field(form.person) }}
+            {% endif %}
+            {% if form.ship %}}
             {{ render_field(form.ship) }}
+            {% endif %}
             {% if form.datetime_ %}
             {{ render_field(form.datetime_) }}
             {% endif %}

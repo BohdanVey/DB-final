@@ -121,6 +121,14 @@ def question(question_id, alive_id):
             flash_text = "Person successfully stolen"
             form = StillForm(request.form)
             text = f"Still person for {full_name}"
+        if question_id == 101:
+            flash_text = "Person successfully transfered"
+            form = TransferForm(request.form)
+            text = f"Transfer person for {full_name}"
+        if question_id == 102:
+            flash_text = "Excursion is in progress))"
+            form = ExcursionForm(request.form)
+            text = "Select people for excursion"
         if 'person' in form:
             form.person.choices = [[x[0], x[1] + ' ' + x[2]] for x in Person().get_all()]
         if 'ship' in form:
@@ -129,7 +137,10 @@ def question(question_id, alive_id):
             form.alien.choices = [[x[0], x[1] + ' ' + x[2]] for x in Alien().get_all()]
     if request.method == "POST":
         if 'person' in form:
-            data['person'] = int(form.person.data)
+            try:
+                data['person'] = int(form.person.data)
+            except:
+                data['person'] = map(int, form.person.data)
         if 'ship' in form:
             data['ship'] = int(form.ship.data)
         if 'datetime_' in form:
