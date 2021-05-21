@@ -65,8 +65,32 @@
     margin-top: 50px;
 }
 
+.text-name {
+    padding-top: 5%;
+    font-size: 24px;
+    font-weight: 420;
+}
+
 .block:hover {
     background: rgba(255, 255, 255, 0.7);
+}
+
+.flashes {
+    width: 100%;
+    background: greenyellow;
+    height: 35px;
+}
+
+.new-flash {
+    padding-top: 5px;
+    font-size: 25px;
+}
+
+.block-big {
+    width: 400px;
+    margin-left: 50%;
+    transform: translate(-200px);
+    background: rgba(129, 129, 129, 0.7);
 }
 
 .image-div {

@@ -27,3 +27,8 @@ class Alien(DBConnect):
             self.cur.execute(f"INSERT INTO alien (name,surname) VALUES ('{name}','{surname}')")
 
         self.con.commit()
+
+    def still_person(self, alien_id, person_id, ship_id, time):
+        self.cur.execute(
+            f"INSERT INTO Stolen (person_id, alien_id, ship_id, time) VALUES ({person_id},{alien_id},{ship_id},'{time}')")
+        self.con.commit()

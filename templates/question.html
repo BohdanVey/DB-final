@@ -16,19 +16,18 @@
     </div>
 </a>
 
-<div class="block centered">
+<div class="block-big">
     <div class="sub-block">
+        <p class="text-name">{{ name }}</p>
         {% from "_formhelpers.html" import render_field %}
 
         <form method=post>
-            {{ render_field(form.name) }}
-            {% if form.surname %}
-            {{ render_field(form.surname) }}
+            {{ render_field(form.person) }}
+            {{ render_field(form.ship) }}
+            {% if form.datetime_ %}
+            {{ render_field(form.datetime_) }}
             {% endif %}
-            {% if form.url %}
-            {{ render_field(form.url) }}
-            {% endif %}
-            <p><input type=submit class='submit-button' value='{{ button_text }}'>
+            <p><input type=submit class='submit-button' value='Submit'>
 
         </form>
     </div>
