@@ -18,8 +18,8 @@
     {% for i in range(0, length) %}
     <div class="block-user">
         <img class="user-img" src="{{ alien[i][3] }}">
-        <div class="user-id">ID: {{ alien[i][0] }}</div>
-        <div class="user-name">{{ alien[i][1] }} {{ alien[i][2] }}</div>
+        <div class="user-id">{{ alien[i][0] }}</div>
+        <div class="user-name">{{ alien[i][1] }}</div>
     </div>
     {% endfor %}
 

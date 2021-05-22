@@ -59,9 +59,8 @@ def alien_page(alien_id):
         ['Transfer person to another ship', 101],
         ['Make excursion for peoples', 102],
         [f"Get all people for {full_name} he still at least N time in specific time", 103],
-        [f"Get mutual excursion for {full_name} and specific person", 104],
-        [f"Get all excursion of {full_name}, where was at least N person", 105],
-        [f"Get all ships in descending order of total number of experiments with {full_name} in specific time", 106]
+        [f"Get all excursion of {full_name}, where was at least N person", 104],
+        [f"Get all ships in descending order of total number of experiments with {full_name} in specific time", 105]
     ]
     return render_template('info.html', length=len(texsts), texsts=texsts, special_id=alien_id)
 
@@ -130,7 +129,7 @@ def question(question_id, alive_id):
         text = "Escape From ship"
     if question_id == 1:
         flash_text = "Experiment gives new information about human"
-        form = MakeExperiment(request.form)
+        form = ExperimentForm(request.form)
         text = "Make experiment on person"
     if question_id == 2:
         flash_text = "You have killed alien"
@@ -170,9 +169,20 @@ def question(question_id, alive_id):
         form = GetNStillForm(request.form)
         text = "Choose n and specify time"
     if question_id == 104:
-        form = GetMutualExcursion(request.form)
+        form = GetNExcursion(request.form)
         text = "Choose date and N"
-
+    if question_id == 105:
+        form = GetShips(request.form)
+        text = "Choose date"
+    if question_id == 200:
+        form = GetAliensStillN(request.form)
+        text = "Get all aliens"
+    if question_id == 201:
+        form = GetStolenN(request.form)
+        text = "Get all person"
+    if question_id == 202:
+        form = GetMonth(request.form)
+        text = "Press Submit"
     if 'person' in form:
         form.person.choices = [[x[0], x[1] + ' ' + x[2]] for x in Person().get_all()]
     if 'ship' in form:
@@ -214,6 +224,10 @@ def question(question_id, alive_id):
                 return render_template('alien.html', length=len(data), alien=data)
             if typ == 'excursion':
                 data = [[x[0], '', '', ' /static/images/ship.png'] for x in data]
+                return render_template('other.html', length=len(data), alien=data)
+            if typ == 'month':
+                data = [["Month: " + str(int(x[0])), "Number of abductions: " + str(int(x[1])), '',
+                         '/static/images/ship.png'] for x in data]
                 return render_template('other.html', length=len(data), alien=data)
         else:
             return render_template("question.html", form=form, name=text)

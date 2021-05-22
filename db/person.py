@@ -158,6 +158,37 @@ HAVING COUNT(alien_id) >= {N};
         ids = [[x[0]] for x in self.cur.fetchall()]
         return ids
 
+    def get_stoledN(self, start_time, finish_time, N):
+        start_time = datetime.datetime.strptime(start_time, "%Y-%m-%d")
+        finish_time = datetime.datetime.strptime(finish_time, "%Y-%m-%d")
+        self.cur.execute(f""" SELECT p.person_id FROM person p 
+        INNER JOIN stolen s ON p.person_id = s.person_id 
+        WHERE time >= '{start_time}' AND time <= '{finish_time}'
+        GROUP BY p.person_id HAVING COUNT(DISTINCT alien_id) >= {N};
+""")
+        ids = [x[0] for x in self.cur.fetchall()]
+        if not ids:
+            return []
+        ids = str(tuple(ids))
+        if ids[-2] == ',':
+            ids = ids[:-2] + ')'
+        self.cur.execute(f"SELECT * FROM person WHERE person_id in {ids}")
+        return self.cur.fetchall()
+
+    def get_number_month(self):
+        self.cur.execute("SELECT EXTRACT(MONTH FROM time),Count(*) FROM stolen GROUP BY EXTRACT(MONTH FROM time);")
+        x = self.cur.fetchall()
+        new_arr = []
+        for i in range(12):
+            if i not in [q[0] for q in x]:
+                new_arr.append([i, 0])
+
+        for i in x:
+            new_arr.append(list(i))
+        print(new_arr)
+        new_arr.sort()
+        return new_arr
+
 
 if __name__ == '__main__':
     import datetime

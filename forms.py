@@ -9,8 +9,90 @@ import datetime
 
 class AdvanceForm(Form):
 
-    def validate(self):
+    def validate(self, alive_id=None):
         return True
+
+
+class GetMonth(AdvanceForm):
+    def validate(self, alive_id):
+        return True
+
+    def submit(self, data):
+        return Person().get_number_month(), "month"
+
+
+class GetShips(AdvanceForm):
+    datetime_start = StringField('Choose first time', validators=[validators.DataRequired()])
+    datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
+
+    def validate(self, alive_id):
+        if not super(GetShips, self).validate():
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
+            my_date = datetime.datetime.strptime(self.datetime_finish.data, "%Y-%m-%d")
+        except:
+            self.datetime_start.errors = []
+            self.datetime_start.errors.append("Please use %Y-%m-%d standard and N should be integer")
+            return False
+        return True
+
+    def submit(self, data):
+        return Alien().get_ships(data['alien'], data['datetime_start'], data['datetime_finish']), 'ship'
+
+
+class GetStolenN(AdvanceForm):
+    N = IntegerField()
+    datetime_start = StringField('Choose first time', validators=[validators.DataRequired()])
+    datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
+
+    def validate(self, alive_id):
+        if not super(GetStolenN, self).validate():
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
+            my_date = datetime.datetime.strptime(self.datetime_finish.data, "%Y-%m-%d")
+            N = int(self.N.data)
+        except:
+            self.datetime_start.errors = []
+            self.datetime_start.errors.append("Please use %Y-%m-%d standard and N should be integer")
+            return False
+        return True
+
+    def submit(self, data):
+        return Person().get_stoledN(data['datetime_start'], data['datetime_finish'], data['N']), 'person'
+
+
+class GetAliensStillN(AdvanceForm):
+    N = IntegerField()
+    datetime_start = StringField('Choose first time', validators=[validators.DataRequired()])
+    datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
+
+    def validate(self, alive_id):
+        if not super(GetAliensStillN, self).validate():
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
+            my_date = datetime.datetime.strptime(self.datetime_finish.data, "%Y-%m-%d")
+            N = int(self.N.data)
+        except:
+            self.datetime_start.errors = []
+            self.datetime_start.errors.append("Please use %Y-%m-%d standard and N should be integer")
+            return False
+        return True
+
+    def submit(self, data):
+        return Alien().get_stillN(data['datetime_start'], data['datetime_finish'], data['N']), 'alien'
+
+
+class GetNExcursion(AdvanceForm):
+    N = IntegerField("Choose N")
+
+    def validate(self, alive_id):
+        return True
+
+    def submit(self, data):
+        return Alien().get_excursion(data['alien'], data['N']), 'excursion'
 
 
 class GetExperiment(AdvanceForm):
@@ -191,6 +273,29 @@ class ExcursionForm(AdvanceForm):
 
     def submit(self, data):
         Alien().make_excursion(data['alien'], data['person'], data['datetime_'])
+
+
+class ExperimentForm(AdvanceForm):
+    alien = SelectMultipleField('Choose alien', validators=[validators.DataRequired()])
+    datetime_ = StringField('Choose still time', validators=[validators.DataRequired()])
+
+    def validate(self, alive_id):
+        if not super(ExperimentForm, self).validate():
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
+            if Person().get_ship_specific_time(alive_id, my_date)[0] == -1:
+                self.datetime_.errors = []
+                self.datetime_.errors.append("Person should be on the ship")
+                return False
+        except:
+            self.datetime_.errors = []
+            self.datetime_.errors.append("Please use %Y-%m-%d standard")
+            return False
+        return True
+
+    def submit(self, data):
+        Person().make_experiment(data['person'], data['alien'], data['datetime_'])
 
 
 class StillForm(AdvanceForm):

@@ -85,7 +85,6 @@
     padding-top: 5px;
     font-size: 25px;
 }
-
 .block-big {
     width: 400px;
     margin-left: 50%;
@@ -141,7 +140,9 @@ a {
 
 .user-name {
     padding-left: 10px;
-    font-size: 24px;
+        padding-top: 10px;
+
+    font-size: 28px;
 }
 
 .user-img {

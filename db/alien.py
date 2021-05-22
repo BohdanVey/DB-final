@@ -55,7 +55,8 @@ class Alien(DBConnect):
         self.con.commit()
 
     def transfer_person(self, alien_id, person_id, ship_id, time1):
-        ship_from, time2 = Person().get_nearest_ship(person_id, time1)
+        ship_from, _, time2 = Person().get_ship_specific_time(person_id, time1)
+        print(time1, time2)
         Ship().update_ship(ship_from, person_id, time1, time2)
         self.cur.execute(
             f"INSERT INTO personShip (person_id, ship_id, start_time, finish_time) VALUES ({person_id},{ship_id},'{time1}','{time2}')")
@@ -95,3 +96,40 @@ HAVING COUNT(person_id) >= N_amount;
         self.cur.execute(f"SELECT * FROM person WHERE person_id in {ids}")
         return self.cur.fetchall()
 
+    def get_excursion(self, alien_id, N):
+        self.cur.execute(f"""SELECT ep.excursion_id FROM excursion e INNER JOIN excursionPerson ep 
+ON ep.excursion_id = e.excursion_id
+WHERE alien_id = {alien_id}
+GROUP BY ep.excursion_id
+HAVING COUNT(person_id) >= {N};
+""")
+        ids = [[x[0]] for x in self.cur.fetchall()]
+        return ids
+
+    def get_stillN(self, start_time, finish_time, N):
+        start_time = datetime.datetime.strptime(start_time, "%Y-%m-%d")
+        finish_time = datetime.datetime.strptime(finish_time, "%Y-%m-%d")
+        self.cur.execute(f""" SELECT s.alien_id FROM alien a 
+        INNER JOIN stolen s ON a.alien_id = s.alien_id 
+        WHERE time >= '{start_time}' AND time <= '{finish_time}'
+        GROUP BY s.alien_id HAVING COUNT(DISTINCT person_id) >= {N};
+""")
+        ids = [x[0] for x in self.cur.fetchall()]
+        if not ids:
+            return []
+        ids = str(tuple(ids))
+        if ids[-2] == ',':
+            ids = ids[:-2] + ')'
+        self.cur.execute(f"SELECT * FROM alien WHERE alien_id in {ids}")
+        return self.cur.fetchall()
+
+    def get_ships(self, alien_id, start_time, finish_time):
+        start_time = datetime.datetime.strptime(start_time, "%Y-%m-%d")
+        finish_time = datetime.datetime.strptime(finish_time, "%Y-%m-%d")
+
+        self.cur.execute(f"""
+        SELECT s.ship_id,s.ship_name FROM ship s INNER JOIN experiment e ON s.ship_id = e.ship_id 
+        INNER JOIN experimentAlien ea ON ea.experiment_id = e.experiment_id 
+        WHERE ea.alien_id = {alien_id} AND time >= '{start_time}' AND time <= '{finish_time}' GROUP BY s.ship_id ORDER BY COUNT(*) DESC;
+""")
+        return self.cur.fetchall()
