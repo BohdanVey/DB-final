@@ -9,7 +9,7 @@ import datetime
 
 class AdvanceForm(Form):
 
-    def validate(self, alive_id=None):
+    def validate(self, alive_id):
         return True
 
 
@@ -26,7 +26,7 @@ class GetShips(AdvanceForm):
     datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(GetShips, self).validate():
+        if not super(GetShips, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
@@ -42,12 +42,12 @@ class GetShips(AdvanceForm):
 
 
 class GetStolenN(AdvanceForm):
-    N = IntegerField()
+    N = IntegerField("Choose N")
     datetime_start = StringField('Choose first time', validators=[validators.DataRequired()])
     datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(GetStolenN, self).validate():
+        if not super(GetStolenN, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
@@ -64,12 +64,12 @@ class GetStolenN(AdvanceForm):
 
 
 class GetAliensStillN(AdvanceForm):
-    N = IntegerField()
+    N = IntegerField("Choose N")
     datetime_start = StringField('Choose first time', validators=[validators.DataRequired()])
     datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(GetAliensStillN, self).validate():
+        if not super(GetAliensStillN, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
@@ -129,7 +129,7 @@ class KilledForm(AdvanceForm):
     datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(KilledForm, self).validate():
+        if not super(KilledForm, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
@@ -150,7 +150,7 @@ class GetNStilledForm(AdvanceForm):
     datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(GetNStilledForm, self).validate():
+        if not super(GetNStilledForm, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
@@ -171,7 +171,7 @@ class GetVisited(AdvanceForm):
     datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(GetVisited, self).validate():
+        if not super(GetVisited, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
@@ -187,11 +187,11 @@ class GetVisited(AdvanceForm):
 
 
 class KillAlien(AdvanceForm):
-    datetime_ = StringField('Choose first time', validators=[validators.DataRequired()])
+    datetime_ = StringField('Choose time', validators=[validators.DataRequired()])
     alien = SelectField('Choose Aliens', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(KillAlien, self).validate():
+        if not super(KillAlien, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
@@ -211,10 +211,10 @@ class KillAlien(AdvanceForm):
 
 
 class EscapeForm(AdvanceForm):
-    datetime_ = StringField('Choose first time', validators=[validators.DataRequired()])
+    datetime_ = StringField('Choose time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(EscapeForm, self).validate():
+        if not super(EscapeForm, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
@@ -240,7 +240,7 @@ class GetNStillForm(AdvanceForm):
     datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(GetNStillForm, self).validate():
+        if not super(GetNStillForm, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
@@ -258,10 +258,10 @@ class GetNStillForm(AdvanceForm):
 
 class ExcursionForm(AdvanceForm):
     person = SelectMultipleField('Choose People', validators=[validators.DataRequired()])
-    datetime_ = StringField('Choose still time', validators=[validators.DataRequired()])
+    datetime_ = StringField('Choose excursion time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(ExcursionForm, self).validate():
+        if not super(ExcursionForm, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
@@ -277,10 +277,10 @@ class ExcursionForm(AdvanceForm):
 
 class ExperimentForm(AdvanceForm):
     alien = SelectMultipleField('Choose alien', validators=[validators.DataRequired()])
-    datetime_ = StringField('Choose still time', validators=[validators.DataRequired()])
+    datetime_ = StringField('Choose experiment time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(ExperimentForm, self).validate():
+        if not super(ExperimentForm, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
@@ -304,7 +304,7 @@ class StillForm(AdvanceForm):
     datetime_ = StringField('Choose still time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(StillForm, self).validate():
+        if not super(StillForm, self).validate(alive_id):
             return False
 
         try:
@@ -331,7 +331,7 @@ class TransferForm(AdvanceForm):
     datetime_ = StringField('Choose still time', validators=[validators.DataRequired()])
 
     def validate(self, alive_id):
-        if not super(TransferForm, self).validate():
+        if not super(TransferForm, self).validate(alive_id):
             return False
         try:
             my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")

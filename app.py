@@ -158,7 +158,7 @@ def question(question_id, alive_id):
         form = StillForm(request.form)
         text = f"Still person for {full_name}"
     if question_id == 101:
-        flash_text = "Person successfully transfered"
+        flash_text = "Person successfully transferred"
         form = TransferForm(request.form)
         text = f"Transfer person for {full_name}"
     if question_id == 102:
