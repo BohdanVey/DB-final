@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Alias</title>
+</head>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
+<body>
+<div id="background"></div>
+<div id="background-2"></div>
+<a href="/">
+    <div id="title">
+        <div id="main-title"><p class="main-text title-text">Aliens</p></div>
+        <div id="sub-title"><p class="main-text sub-text">explore the world of strangers</p></div>
+    </div>
+</a>
+<div id="content">
+    {% for i in range(0, length) %}
+    <div class="block-user">
+        <img class="user-img" src="{{ alien[i][3] }}">
+        <div class="user-id">ID: {{ alien[i][0] }}</div>
+        <div class="user-name">{{ alien[i][1] }} {{ alien[i][2] }}</div>
+    </div>
+    {% endfor %}
+
+
+</div>
+</body>
+</html>

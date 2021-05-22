@@ -90,8 +90,8 @@ HAVING COUNT(person_id) >= N_amount;
         if not ids:
             return []
         ids = str(tuple(ids))
-        self.cur.execute(f"SELECT * FROM person WHERE person_id in {ids[:-2]})")
+        if ids[-2] == ',':
+            ids = ids[:-2] + ')'
+        self.cur.execute(f"SELECT * FROM person WHERE person_id in {ids}")
         return self.cur.fetchall()
 
-    def get_excursion(self, alien_id, excursion_id, start_time, finish_time):
-        return []

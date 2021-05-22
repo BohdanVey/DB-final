@@ -142,6 +142,18 @@ def question(question_id, alive_id):
     if question_id == 4:
         form = GetNStilledForm(request.form)
         text = "Choose date and N"
+    if question_id == 5:
+        form = KilledForm(request.form)
+        text = "Choose date"
+    if question_id == 6:
+        form = GetKillAndStill(request.form)
+        text = "Press Submit"
+    if question_id == 7:
+        form = GetExcursion(request.form)
+        text = "Choose Alien"
+    if question_id == 8:
+        form = GetExperiment(request.form)
+        text = "Choose Alien"
     if question_id == 100:
         flash_text = "Person successfully stolen"
         form = StillForm(request.form)
@@ -187,6 +199,7 @@ def question(question_id, alive_id):
                 data[x.id] = x.data
         if form.validate(alive_id):
             data = form.submit(data)
+            print(data)
             try:
                 data, typ = data
             except:
@@ -196,7 +209,12 @@ def question(question_id, alive_id):
             if typ == 'ship':
                 print(data)
                 data = [[x[0], x[1], '', ' /static/images/ship.png'] for x in data]
-                return render_template('person.html', length=len(data), person=data)
+                return render_template('other.html', length=len(data), alien=data)
+            if typ == 'alien':
+                return render_template('alien.html', length=len(data), alien=data)
+            if typ == 'excursion':
+                data = [[x[0], '', '', ' /static/images/ship.png'] for x in data]
+                return render_template('other.html', length=len(data), alien=data)
         else:
             return render_template("question.html", form=form, name=text)
         flash(flash_text)

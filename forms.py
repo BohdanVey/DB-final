@@ -13,6 +13,55 @@ class AdvanceForm(Form):
         return True
 
 
+class GetExperiment(AdvanceForm):
+    N = IntegerField("Choose N")
+
+    def validate(self, alive_id):
+        return True
+
+    def submit(self, data):
+        return Person().get_experiment(data['person'], data['N']), 'excursion'
+
+
+class GetExcursion(AdvanceForm):
+    alien = SelectField('Choose Aliens', validators=[validators.DataRequired()])
+
+    def validate(self, alive_id):
+        return True
+
+    def submit(self, data):
+        return Person().get_excursion(data['person'], data['alien']), 'excursion'
+
+
+class GetKillAndStill(AdvanceForm):
+
+    def validate(self, alive_id):
+        return True
+
+    def submit(self, data):
+        return Person().get_killed_and_still(data['person']), 'alien'
+
+
+class KilledForm(AdvanceForm):
+    datetime_start = StringField('Choose first time', validators=[validators.DataRequired()])
+    datetime_finish = StringField('Choose second time', validators=[validators.DataRequired()])
+
+    def validate(self, alive_id):
+        if not super(KilledForm, self).validate():
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_start.data, "%Y-%m-%d")
+            my_date = datetime.datetime.strptime(self.datetime_finish.data, "%Y-%m-%d")
+        except:
+            self.datetime_start.errors = []
+            self.datetime_start.errors.append("Please use %Y-%m-%d standard and N should be integer")
+            return False
+        return True
+
+    def submit(self, data):
+        return Person().get_killed(data['person'], data['datetime_start'], data['datetime_finish']), 'alien'
+
+
 class GetNStilledForm(AdvanceForm):
     N = IntegerField("Choose N")
     datetime_start = StringField('Choose first time', validators=[validators.DataRequired()])
@@ -32,7 +81,7 @@ class GetNStilledForm(AdvanceForm):
         return True
 
     def submit(self, data):
-        return Person().get_stolen(data['person'], data['N'], data['datetime_start'], data['datetime_finish']), 'person'
+        return Person().get_stolen(data['person'], data['N'], data['datetime_start'], data['datetime_finish']), 'alien'
 
 
 class GetVisited(AdvanceForm):

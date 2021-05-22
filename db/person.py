@@ -100,8 +100,63 @@ HAVING COUNT(alien_id) >= {N};
         if not ids:
             return []
         ids = str(tuple(ids))
-        self.cur.execute(f"SELECT * FROM alien WHERE alien_id in {ids[:-2]})")
+        if ids[-2] == ',':
+            ids = ids[:-2] + ')'
+        self.cur.execute(f"SELECT * FROM alien WHERE alien_id in {ids[:-1]})")
         return self.cur.fetchall()
+
+    def get_killed(self, person_id, start_time, finish_time):
+
+        start_time = datetime.datetime.strptime(start_time, "%Y-%m-%d")
+        finish_time = datetime.datetime.strptime(finish_time, "%Y-%m-%d")
+        self.cur.execute(f"""SELECT alien_id FROM kills
+WHERE person_id = {person_id}
+AND time >= '{start_time}'
+AND time <= '{finish_time}'
+GROUP BY alien_id;""")
+        ids = [x[0] for x in self.cur.fetchall()]
+        if not ids:
+            return []
+        ids = str(tuple(ids))
+        if ids[-2] == ',':
+            ids = ids[:-2] + ')'
+        self.cur.execute(f"SELECT * FROM alien WHERE alien_id in {ids}")
+        return self.cur.fetchall()
+
+    def get_killed_and_still(self, person_id):
+        self.cur.execute(f"""SELECT DISTINCT kills.alien_id 
+FROM kills, stolen
+WHERE kills.person_id = {person_id} 
+AND stolen.person_id = {person_id} 
+AND kills.alien_id = stolen.alien_id;
+""")
+        ids = [x[0] for x in self.cur.fetchall()]
+        if not ids:
+            return []
+        ids = str(tuple(ids))
+        if ids[-2] == ',':
+            ids = ids[:-2] + ')'
+        self.cur.execute(f"SELECT * FROM alien WHERE alien_id in {ids}")
+        return self.cur.fetchall()
+
+    def get_excursion(self, person_id, alien_id):
+        self.cur.execute(f"""SELECT * 
+FROM excursion e INNER JOIN excursionPerson ep ON e.excursion_id=ep.excursion_id
+WHERE person_id = {person_id} 
+AND alien_id = {alien_id} 
+""")
+        ids = [[x[0]] for x in self.cur.fetchall()]
+        return ids
+
+    def get_experiment(self, person_id, N):
+        self.cur.execute(f"""SELECT ea.experiment_id FROM experiment e INNER JOIN experimentAlien ea
+ON ea.experiment_id = e.experiment_id
+WHERE person_id = {person_id}
+GROUP BY ea.experiment_id
+HAVING COUNT(alien_id) >= {N};
+""")
+        ids = [[x[0]] for x in self.cur.fetchall()]
+        return ids
 
 
 if __name__ == '__main__':
