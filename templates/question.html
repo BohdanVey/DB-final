@@ -22,14 +22,27 @@
         {% from "_formhelpers.html" import render_field %}
 
         <form method=post>
+            {% if form.N %}
+            {{ render_field(form.N) }}
+            {% endif %}
+
             {% if form.person %}
             {{ render_field(form.person) }}
+            {% endif %}
+             {% if form.alien %}
+            {{ render_field(form.alien) }}
             {% endif %}
             {% if form.ship %}}
             {{ render_field(form.ship) }}
             {% endif %}
             {% if form.datetime_ %}
             {{ render_field(form.datetime_) }}
+            {% endif %}
+            {% if form.datetime_start %}
+            {{ render_field(form.datetime_start) }}
+            {% endif %}
+            {% if form.datetime_finish %}
+            {{ render_field(form.datetime_finish) }}
             {% endif %}
             <p><input type=submit class='submit-button' value='Submit'>
 

@@ -6,9 +6,11 @@ import datetime
 try:
     from db import DBConnect
     from person import Person
+    from ship import Ship
 except:
     from .db import DBConnect
     from .person import Person
+    from .ship import Ship
 
 
 class Alien(DBConnect):
@@ -35,6 +37,10 @@ class Alien(DBConnect):
 
         self.con.commit()
 
+    def check_alive(self, alien_id):
+        self.cur.execute(f"SELECT * FROM kills WHERE alien_id={alien_id}")
+        return len(self.cur.fetchall()) == 0
+
     def still_person(self, alien_id, person_id, ship_id, time1):
         _, time2 = Person().get_nearest_ship(person_id, time1)
         self.cur.execute(
@@ -50,8 +56,7 @@ class Alien(DBConnect):
 
     def transfer_person(self, alien_id, person_id, ship_id, time1):
         ship_from, time2 = Person().get_nearest_ship(person_id, time1)
-        self.cur.execute(
-            f"UPDATE personShip SET finish_time='{time1}' WHERE ship_id = {ship_from} and finish_time='{time2}'")
+        Ship().update_ship(ship_from, person_id, time1, time2)
         self.cur.execute(
             f"INSERT INTO personShip (person_id, ship_id, start_time, finish_time) VALUES ({person_id},{ship_id},'{time1}','{time2}')")
         self.cur.execute(
@@ -68,6 +73,25 @@ class Alien(DBConnect):
             f"INSERT INTO excursionPerson (excursion_id,person_id) VALUES {txt}")
         self.con.commit()
 
+    def get_stolen(self, alien_id, N, start_time, finish_time):
+        self.cur.execute(f"""
+        WITH constants (F_start, T_end, N_amount, A_alien_id) AS (
+	VALUES ('{start_time}', '{finish_time}', {N}, {alien_id})
+)
+SELECT person_id FROM Stolen, constants
+WHERE alien_id = A_alien_id
+AND time >= TO_DATE(F_start, 'YYYY-MM-DD')
+AND time <= TO_DATE(T_end, 'YYYY-MM-DD')
+GROUP BY person_id, N_amount
+HAVING COUNT(person_id) >= N_amount;
+""")
 
-if __name__ == '__main__':
-    Alien().make_excursion(14, [1, 2, 3], '2000-12-12')
+        ids = [x[0] for x in self.cur.fetchall()]
+        if not ids:
+            return []
+        ids = str(tuple(ids))
+        self.cur.execute(f"SELECT * FROM person WHERE person_id in {ids[:-2]})")
+        return self.cur.fetchall()
+
+    def get_excursion(self, alien_id, excursion_id, start_time, finish_time):
+        return []

@@ -23,3 +23,8 @@ class Ship(DBConnect):
     def add_ship(self, name, surname=None, url=None):
         self.cur.execute(f"INSERT INTO ship (ship_name) VALUES ('{name}')")
         self.con.commit()
+
+    def update_ship(self, ship_id, person_id, time1, time2):
+        self.cur.execute(
+            f"UPDATE personShip SET finish_time='{time1}' WHERE ship_id = {ship_id} and finish_time='{time2}' and person_id = {person_id}")
+        self.con.commit()

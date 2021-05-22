@@ -113,40 +113,90 @@ def question(question_id, alive_id):
     text = None
     flash_text = ""
     data = dict()
+    full_name = ""
     if 200 > question_id >= 100:
         alien = Alien().get_by_id(alive_id)
         data['alien'] = alive_id
         full_name = alien[1] + ' ' + alien[2]
-        if question_id == 100:
-            flash_text = "Person successfully stolen"
-            form = StillForm(request.form)
-            text = f"Still person for {full_name}"
-        if question_id == 101:
-            flash_text = "Person successfully transfered"
-            form = TransferForm(request.form)
-            text = f"Transfer person for {full_name}"
-        if question_id == 102:
-            flash_text = "Excursion is in progress))"
-            form = ExcursionForm(request.form)
-            text = "Select people for excursion"
-        if 'person' in form:
-            form.person.choices = [[x[0], x[1] + ' ' + x[2]] for x in Person().get_all()]
-        if 'ship' in form:
-            form.ship.choices = [[x[0], x[1]] for x in Ship().get_all()]
-        if 'alien' in form:
-            form.alien.choices = [[x[0], x[1] + ' ' + x[2]] for x in Alien().get_all()]
+
+    if question_id < 100:
+        person = Person().get_by_id(alive_id)
+        data['person'] = alive_id
+        full_name = person[1] + ' ' + person[2]
+
+    if question_id == 0:
+        flash_text = "You have escaped"
+        form = EscapeForm(request.form)
+        text = "Escape From ship"
+    if question_id == 1:
+        flash_text = "Experiment gives new information about human"
+        form = MakeExperiment(request.form)
+        text = "Make experiment on person"
+    if question_id == 2:
+        flash_text = "You have killed alien"
+        form = KillAlien(request.form)
+        text = "Choose alien to Kill"
+    if question_id == 3:
+        form = GetVisited(request.form)
+        text = "Choose start and finish time"
+    if question_id == 4:
+        form = GetNStilledForm(request.form)
+        text = "Choose date and N"
+    if question_id == 100:
+        flash_text = "Person successfully stolen"
+        form = StillForm(request.form)
+        text = f"Still person for {full_name}"
+    if question_id == 101:
+        flash_text = "Person successfully transfered"
+        form = TransferForm(request.form)
+        text = f"Transfer person for {full_name}"
+    if question_id == 102:
+        flash_text = "Excursion is in progress))"
+        form = ExcursionForm(request.form)
+        text = "Select people for excursion"
+    if question_id == 103:
+        form = GetNStillForm(request.form)
+        text = "Choose n and specify time"
+    if question_id == 104:
+        form = GetMutualExcursion(request.form)
+        text = "Choose date and N"
+
+    if 'person' in form:
+        form.person.choices = [[x[0], x[1] + ' ' + x[2]] for x in Person().get_all()]
+    if 'ship' in form:
+        form.ship.choices = [[x[0], x[1]] for x in Ship().get_all()]
+    if 'alien' in form:
+        form.alien.choices = [[x[0], x[1] + ' ' + x[2]] for x in Alien().get_all()]
     if request.method == "POST":
         if 'person' in form:
             try:
                 data['person'] = int(form.person.data)
             except:
                 data['person'] = map(int, form.person.data)
-        if 'ship' in form:
-            data['ship'] = int(form.ship.data)
-        if 'datetime_' in form:
-            data['datetime_'] = form.datetime_.data
-        if form.validate():
-            form.submit(data)
+
+        if 'alien' in form:
+            try:
+                data['alien'] = int(form.alien.data)
+            except:
+                data['alien'] = map(int, form.alien.data)
+
+        for x in form:
+            try:
+                data[x.id] = int(x.data)
+            except:
+                data[x.id] = x.data
+        if form.validate(alive_id):
+            data = form.submit(data)
+            try:
+                data, typ = data
+            except:
+                data, typ = data, None
+            if typ == 'person':
+                return render_template('person.html', length=len(data), person=data)
+            if typ == 'ship':
+                print(data)
+                data = [[x[0], x[1], '', ' /static/images/ship.png'] for x in data]
+                return render_template('person.html', length=len(data), person=data)
         else:
             return render_template("question.html", form=form, name=text)
         flash(flash_text)
