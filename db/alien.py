@@ -18,7 +18,7 @@ class Alien(DBConnect):
         super(Alien, self).__init__()
 
     def get_all(self, params=['*']):
-        self.cur.execute(f"SELECT {','.join(params)} FROM alien")
+        self.cur.execute(f"SELECT {','.join(params)} FROM alien WHERE alive = true")
         return self.cur.fetchall()
 
     def get_by_id(self, _id, params=['*']):

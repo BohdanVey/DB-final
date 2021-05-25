@@ -12,6 +12,28 @@ class AdvanceForm(Form):
     def validate(self, alive_id):
         return True
 
+    def submit(self, data):
+        pass
+
+
+class StillShipForm(AdvanceForm):
+    datetime_ = StringField('Choose first time', validators=[validators.DataRequired()])
+    ship = SelectField('Choose Ship', validators=[validators.DataRequired()])
+
+    def validate(self, alive_id):
+        if not super(StillShipForm, self).validate(alive_id):
+            return False
+        try:
+            my_date = datetime.datetime.strptime(self.datetime_.data, "%Y-%m-%d")
+        except:
+            self.datetime_.errors = []
+            self.datetime_.errors.append("Please use %Y-%m-%d standard and N should be integer")
+            return False
+        return True
+
+    def submit(self, data):
+        Ship().still_ship(data['ship'], data['datetime_'])
+
 
 class GetMonth(AdvanceForm):
     def validate(self, alive_id):

@@ -71,6 +71,7 @@ def general_page():
         ["Get all aliens, which still at least N people at specific time", 200],
         ["Get all peoples, which was stolen at least N times at specific time", 201],
         ["Get total number of abductions during months", 202],
+        ["Still the ship", 203],
 
     ]
     return render_template('info.html', length=len(texsts), texsts=texsts, special_id=0)
@@ -113,6 +114,7 @@ def question(question_id, alive_id):
     flash_text = ""
     data = dict()
     full_name = ""
+    # flash_text, form, text = question_dict[question_id]
     if 200 > question_id >= 100:
         alien = Alien().get_by_id(alive_id)
         data['alien'] = alive_id
@@ -183,6 +185,11 @@ def question(question_id, alive_id):
     if question_id == 202:
         form = GetMonth(request.form)
         text = "Press Submit"
+    if question_id == 203:
+        form = StillShipForm(request.form)
+        text = "Choose ship and time"
+        flash_text = "Every person have escaped"
+
     if 'person' in form:
         form.person.choices = [[x[0], x[1] + ' ' + x[2]] for x in Person().get_all()]
     if 'ship' in form:

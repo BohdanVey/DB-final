@@ -75,6 +75,8 @@ class Person(DBConnect):
         ship_id, _, _ = self.get_ship_specific_time(person_id, time)
         self.cur.execute(
             f"INSERT INTO kills (person_id,alien_id,time) VALUES ({person_id},{alien_id},'{time}')")
+        self.cur.execute(
+            f"UPDATE alien SET alive=false WHERE alien_id = {alien_id}")
         self.con.commit()
 
     def get_visited(self, person_id, start_time, finish_time):
