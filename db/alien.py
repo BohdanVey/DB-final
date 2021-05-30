@@ -2,7 +2,23 @@ import psycopg2
 import os
 import time
 import datetime
+'''
+CREATE INDEX idx_alien_fullname
+ON alien (name, surname);
 
+CREATE INDEX idx_person_fullname
+ON person (name, surname);
+
+CREATE INDEX idx_person_kills_alien
+ON kills (person_id, alien_id);
+
+
+CREATE INDEX idx_alien_transfers_person
+ON transfer (person_id, alien_id);
+
+CREATE INDEX idx_alien_steals_person
+ON stolen (person_id, alien_id);
+'''
 try:
     from db import DBConnect
     from person import Person
